@@ -1,0 +1,1 @@
+/usr/bin/c++ -Wl,--dependency-file=CMakeFiles/app.dir/link.d CMakeFiles/app.dir/src/boss.cpp.o CMakeFiles/app.dir/src/employee.cpp.o CMakeFiles/app.dir/src/manager.cpp.o CMakeFiles/app.dir/src/workerManager.cpp.o "CMakeFiles/app.dir/staff-manager-main.cpp.o" -o /home/yao/projects/cpp-staff-manager/bin/app
