@@ -56,6 +56,7 @@ int main()
             wm.showEmp();
             break;
         case 3: // 删除职工
+            wm.delEmployeeMenu();
             break;
         case 4: // 修改职工信息
             break;

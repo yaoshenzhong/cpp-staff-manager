@@ -193,6 +193,111 @@ void WorkerManager::showEmp()
     system("clear");
 }
 
+void WorkerManager::delEmployeeMenu()
+{
+    while (true)
+    {
+        this->delEmp(); // 调用删除职工函数
+        cout << "是否继续删除职工？\n";
+        cout << "0.返回主菜单\n";
+        cout << "1.继续删除\n";
+        cout << "请输入你的选择：";
+        int choice = 0;
+        cin >> choice;
+
+        if (choice != 1)
+        {
+            system("clear");
+            break;
+        }
+    }
+}
+
+void WorkerManager::delEmp()
+{
+    system("clear");
+    if (this->empArray == nullptr)
+    {
+        cout << "当前系统暂无职工信息，请先添加职工信息" << endl;
+    }
+    else
+    {
+        // 删除职工
+        cout << "请输入你要删除的职工编号：";
+        int choice;
+        while (true)
+        {
+            cin >> choice;
+            if (choice > 0)
+            {
+                break;
+            }
+            else
+            {
+                cout << "输入的职工编号不符合要求，请重新输入：";
+            }
+        }
+
+        int index = this->isExist(choice);
+        if (index == -1)
+        {
+            cout << "此编号职工不存在" << endl;
+        }
+        else
+        {
+            cout << "此编号职工存在，你确定要删除该职工吗？\n";
+            cout << "0.取消删除\n";
+            cout << "1.确认删除\n";
+            cout << "请输入你的选择：";
+            while (true)
+            {
+
+                int choice = 0;
+                cin >> choice;
+                if (choice == 1)
+                {
+                    break;
+                }
+                else if (choice == 0)
+                {
+                    system("clear");
+                    return;
+                }
+                else
+                {
+                    cout << "不符合要求，请重新输入：";
+                }
+            }
+
+            delete this->empArray[index];
+            for (int i = index + 1; i < this->empNum; i++)
+            {
+                this->empArray[i - 1] = this->empArray[i];
+            }
+            this->empArray[this->empNum - 1] = nullptr;
+            this->empNum--; // 删除职工，职工人数减一
+            cout << "-----------------------------------------\n";
+            cout << "职工编号为 " << choice << " 的职工信息已被删除\n";
+            cout << "-----------------------------------------\n";
+            this->saveFile();
+        }
+    }
+}
+
+int WorkerManager::isExist(int id)
+{
+    int index = -1;
+    for (int i = 0; i < this->empNum; i++)
+    {
+        if (this->empArray[i]->id == id)
+        {
+            index = i;
+            break;
+        }
+    }
+    return index;
+}
+
 void WorkerManager::sortEmp()
 {
     if (this->empArray == nullptr)
@@ -214,7 +319,7 @@ void WorkerManager::addEmployeeMenu()
 {
     while (true)
     {
-        addEmployee(); // 调用添加职工函数
+        addEmp(); // 调用添加职工函数
         cout << "是否继续添加新职工？\n";
         cout << "0.返回主菜单\n";
         cout << "1.继续添加\n";
@@ -230,7 +335,7 @@ void WorkerManager::addEmployeeMenu()
     }
 }
 
-void WorkerManager::addEmployee()
+void WorkerManager::addEmp()
 {
     system("clear");
     cout << "请输入添加职工数量：";

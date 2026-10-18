@@ -26,13 +26,20 @@ public:
 
     void showEmp(); // 显示职工
 
+    void delEmployeeMenu(); // 删除职工菜单
+
+    void delEmp(); // 具体删除职工的函数
+
+    //判断职工是否存在，如果存在，返回职工所在数组中的位置，否则返回-1
+    int isExist(int id); 
+
     void sortEmp(); // 按职工编号对职工进行排序
 
     void exitSystem(void); // 退出系统
 
     void addEmployeeMenu(); // 添加职工菜单
 
-    void addEmployee(); // 具体添加职工的函数
+    void addEmp(); // 具体添加职工的函数
 
     ~WorkerManager(); // 析构函数
 };
