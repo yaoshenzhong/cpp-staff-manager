@@ -30,8 +30,12 @@ public:
 
     void delEmp(); // 具体删除职工的函数
 
-    //判断职工是否存在，如果存在，返回职工所在数组中的位置，否则返回-1
-    int isExist(int id); 
+    void modEmployeeMenu(); // 修改职工菜单
+
+    void modEmp(); // 具体修改职工信息函数
+
+    // 判断职工是否存在，如果存在，返回职工所在数组中的位置，否则返回-1
+    int isExist(int id);
 
     void sortEmp(); // 按职工编号对职工进行排序
 

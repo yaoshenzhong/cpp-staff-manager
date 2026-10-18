@@ -2,6 +2,7 @@
 #include <fstream>
 #include <filesystem>
 #include <algorithm>
+#include <iomanip>
 #define FILENAME "../data/empFile.txt"
 #include "workerManager.h"
 #include "employee.h"
@@ -167,13 +168,47 @@ void WorkerManager::showEmp()
     else
     {
         system("clear");
-        cout << "------------所有职工信息如下：-----------\n";
+        cout << "---------------------------------------\n";
+        cout << "|              职 工 信 息 表         |\n";
+        cout << "---------------------------------------\n";
+
+        // 表头
+        cout << std::left
+             << "| " << std::setw(12) << " 职工编号 "
+             << "| " << std::setw(14) << "  职工姓名  "
+             << "| " << std::setw(14) << " 职工岗位 "
+             << "|\n";
+
+        cout << "---------------------------------------\n";
 
         for (int i = 0; i < this->empNum; i++)
         {
             // 利用多态调用接口
-            this->empArray[i]->showInfo();
+
+            cout << std::left
+                 << "| " << std::setw(10) << this->empArray[i]->id
+                 << "| " << std::setw(12) << this->empArray[i]->name
+                 << "| " << std::setw(12);
+
+            switch (this->empArray[i]->deptId)
+            {
+            case 1:
+                cout << "员工";
+                break;
+            case 2:
+                cout << "经理";
+                break;
+            case 3:
+                cout << "老板";
+                break;
+            default:
+                cout << "未知岗位";
+                break;
+            }
+            cout << "|\n";
         }
+        cout << "---------------------------------------\n";
+        cout << "共 " << this->empNum << " 位职工\n\n";
     }
 
     cout << "输入 0 返回主菜单\n请输入：";
@@ -280,6 +315,136 @@ void WorkerManager::delEmp()
             cout << "职工编号为 " << choice << " 的职工信息已被删除\n";
             cout << "-----------------------------------------\n";
             this->saveFile();
+        }
+    }
+}
+
+void WorkerManager::modEmployeeMenu()
+{
+    while (true)
+    {
+        this->modEmp(); // 调用修改职工信息函数
+        cout << "是否继续修改职工信息？\n";
+        cout << "0.返回主菜单\n";
+        cout << "1.继续修改职工信息\n";
+        cout << "请输入你的选择：";
+        int choice = 0;
+        cin >> choice;
+
+        if (choice != 1)
+        {
+            system("clear");
+            break;
+        }
+    }
+}
+
+void WorkerManager::modEmp()
+{
+    system("clear");
+    if (this->empArray == nullptr)
+    {
+        cout << "当前系统暂无职工信息，请先添加职工信息" << endl;
+    }
+    else
+    {
+        // 修改职工信息
+        cout << "请输入待修改职工的编号：";
+        int choice;
+        while (true)
+        {
+            cin >> choice;
+            if (choice > 0)
+            {
+                break;
+            }
+            else
+            {
+                cout << "输入的职工编号不符合要求，请重新输入：";
+            }
+        }
+        int index = this->isExist(choice);
+        if (index == -1)
+        {
+            cout << "此编号职工不存在" << endl;
+        }
+        else
+        {
+            cout << "查到编号为 " << choice << " 该职工\n";
+            int newId;
+            std::string newName;
+            int newDeptId;
+            while (true)
+            {
+                cout << "请输入该职工新的职工编号：";
+                cin >> newId;
+                cout << "请输入该职工新的职工姓名：";
+                cin >> newName;
+                cout << "1.普通职工  2.经理  3.老板\n";
+                cout << "请输入该职工新的部门名称编号：";
+                cin >> newDeptId;
+                if (newDeptId < 1 || newDeptId > 3)
+                {
+                    cout << "部门编号输入错误！请重新输入\n";
+                    continue;
+                }
+                else
+                {
+                    break;
+                }
+            }
+            cout << "你确定要修改该职工的信息吗？\n";
+            cout << "0.取消修改\n";
+            cout << "1.确认修改\n";
+            cout << "请输入你的选择：";
+            while (true)
+            {
+
+                int choice = 0;
+                cin >> choice;
+                if (choice == 1)
+                {
+                    break;
+                }
+                else if (choice == 0)
+                {
+                    system("clear");
+                    return;
+                }
+                else
+                {
+                    cout << "不符合要求，请重新输入：";
+                }
+            }
+
+            delete this->empArray[index];
+            Worker *worker = nullptr;
+            switch (newDeptId)
+            {
+            case 1:
+                worker = new Employee{newId, newName, newDeptId};
+                break;
+            case 2:
+                worker = new Manager{newId, newName, newDeptId};
+                break;
+            case 3:
+                worker = new Boss{newId, newName, newDeptId};
+                break;
+            default:
+                break;
+            }
+            if (worker == nullptr)
+            {
+                cout << "职工信息修改失败\n";
+            }
+            else
+            {
+                this->empArray[index] = worker;
+                cout << "-----------------------------------------\n";
+                cout << "职工编号为 " << choice << " 的职工信息已被修改\n";
+                cout << "-----------------------------------------\n";
+                this->saveFile();
+            }
         }
     }
 }

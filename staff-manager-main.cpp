@@ -59,6 +59,7 @@ int main()
             wm.delEmployeeMenu();
             break;
         case 4: // 修改职工信息
+            wm.modEmployeeMenu();
             break;
         case 5: // 查找职工信息
             break;
