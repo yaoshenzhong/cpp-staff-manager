@@ -12,22 +12,27 @@ public:
     // 员工数组的指针
     Worker **empArray;
 
-    // 默认构造函数
-    WorkerManager();
-    // 展示菜单
-    void showMenu(void);
+    WorkerManager(); // 默认构造函数
 
-    // 保存文件
-    void saveFile();
-    // 读取文件
-    void readFlie();
+    void showMenu(void); // 展示菜单
 
-    // 退出系统
-    void exitSystem(void);
-    // 添加职工菜单
-    void addEmployeeMenu();
-    // 具体添加职工的函数
-    void addEmployee();
-    // 析构函数
-    ~WorkerManager();
+    void saveFile(); // 保存文件
+
+    void readFlie(); // 读取文件
+
+    void initEmp(); // 初始化职工数据
+
+    int getEmpNum(); // 统计职工人数
+
+    void showEmp(); // 显示职工
+
+    void sortEmp(); // 按职工编号对职工进行排序
+
+    void exitSystem(void); // 退出系统
+
+    void addEmployeeMenu(); // 添加职工菜单
+
+    void addEmployee(); // 具体添加职工的函数
+
+    ~WorkerManager(); // 析构函数
 };

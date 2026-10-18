@@ -28,18 +28,20 @@ int main()
     // test();
     WorkerManager wm{};
 
-    for (int i = 0; i < wm.empNum; i++) {
-        cout << wm.empArray[i]->id << ' '
-            << wm.empArray[i]->name << ' '
-            << wm.empArray[i]->deptId << endl;
-    }
+    // // 测试代码
+    // for (int i = 0; i < wm.empNum; i++) {
+    //     cout << wm.empArray[i]->id << ' '
+    //         << wm.empArray[i]->name << ' '
+    //         << wm.empArray[i]->deptId << endl;
+    // }
+
     int choice = 0;
     bool running = true;
     while (running)
     {
         // 展示菜单
         wm.showMenu();
-        cout << "请输入你的选择：" << endl;
+        cout << "请输入你的选择：";
         cin >> choice;
         switch (choice)
         {
@@ -50,7 +52,8 @@ int main()
         case 1: // 增加职工
             wm.addEmployeeMenu();
             break;
-        case 2: // 打印职工信息
+        case 2: // 显示职工信息
+            wm.showEmp();
             break;
         case 3: // 删除职工
             break;

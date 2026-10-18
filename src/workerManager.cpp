@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <filesystem>
+#include <algorithm>
 #define FILENAME "../data/empFile.txt"
 #include "workerManager.h"
 #include "employee.h"
@@ -10,6 +11,11 @@
 using std::cin;
 using std::cout;
 using std::endl;
+
+bool cmp(Worker *worker1, Worker *worker2)
+{
+    return worker1->id < worker2->id;
+}
 
 WorkerManager::WorkerManager()
 {
@@ -74,39 +80,8 @@ void WorkerManager::readFlie()
     {
         cout << "文件打开成功 且 文件中有数据" << endl;
         this->fileIsEmpty = false; // 初始化文件不为空标志
-        // 后续读取职工数据
-        int id;
-        std::string name;
-        int deptId;
-
-        this->empNum = 0; // 统计职工人数
-        while (ifs >> id >> name >> deptId)
-        {
-            this->empNum++;
-        }
-
-        ifs.clear();                 // 清除文件流的状态标志
-        ifs.seekg(0, std::ios::beg);      // 将读取位置移动到文件开头
-
-        this->empArray = new Worker *[this->empNum];
-        int index = 0;
-        while (ifs >> id >> name >> deptId)
-        {
-            switch (deptId)
-            {
-            case 1:
-                this->empArray[index++] = new Employee{id, name, deptId};
-                break;
-            case 2:
-                this->empArray[index++] = new Manager{id, name, deptId};
-                break;
-            case 3:
-                this->empArray[index++] = new Boss{id, name, deptId};
-                break;
-            default:
-                break;
-            }
-        }
+        // 后续从文件种读取，初始化职工数据
+        this->initEmp();
     }
     else
     {
@@ -118,6 +93,116 @@ void WorkerManager::readFlie()
     }
     // 关闭文件
     ifs.close();
+}
+
+void WorkerManager::initEmp()
+{
+
+    std::ifstream ifs;
+    ifs.open(FILENAME, std::ios::in);
+
+    // 统计职工人数
+    this->empNum = this->getEmpNum();
+
+    int id;
+    std::string name;
+    int deptId;
+
+    this->empArray = new Worker *[this->empNum];
+    int index = 0;
+    while (ifs >> id >> name >> deptId)
+    {
+        Worker *worker = nullptr;
+        switch (deptId)
+        {
+        case 1:
+            worker = new Employee{id, name, deptId};
+            break;
+        case 2:
+            worker = new Manager{id, name, deptId};
+            break;
+        case 3:
+            worker = new Boss{id, name, deptId};
+            break;
+        default:
+            break;
+        }
+        this->empArray[index++] = worker;
+    }
+
+    ifs.close(); // 关闭文件
+}
+
+int WorkerManager::getEmpNum()
+{
+    std::ifstream ifs;
+
+    ifs.open(FILENAME, std::ios::in); // 打开文件
+
+    int id;
+    std::string name;
+    int deptId;
+
+    int count = 0; // 统计职工人数
+
+    while (ifs >> id >> name >> deptId)
+    {
+        count++;
+    }
+
+    ifs.close(); // 关闭文件
+
+    return count;
+}
+
+void WorkerManager::showEmp()
+{
+    // 按职工编号对职工进行排序
+    this->sortEmp();
+
+    if (this->empArray == nullptr)
+    {
+        cout << "当前系统暂无职工信息，请先添加职工信息" << endl;
+    }
+    else
+    {
+        system("clear");
+        cout << "------------所有职工信息如下：-----------\n";
+
+        for (int i = 0; i < this->empNum; i++)
+        {
+            // 利用多态调用接口
+            this->empArray[i]->showInfo();
+        }
+    }
+
+    cout << "输入 0 返回主菜单\n请输入：";
+    int choice;
+    while (true)
+    {
+        cin >> choice;
+        if (choice == 0)
+        {
+            break;
+        }
+        else
+        {
+            cout << "不符合要求，请重新输入：";
+        }
+    }
+    system("clear");
+}
+
+void WorkerManager::sortEmp()
+{
+    if (this->empArray == nullptr)
+    {
+        return; // 职工管理系统无职工信息，视为有序
+    }
+    else
+    {
+        std::sort(this->empArray, this->empArray + this->empNum, cmp);
+    }
 }
 
 void WorkerManager::exitSystem(void)
