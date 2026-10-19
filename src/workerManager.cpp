@@ -13,9 +13,14 @@ using std::cin;
 using std::cout;
 using std::endl;
 
-bool cmp(Worker *worker1, Worker *worker2)
+bool cmp1(Worker *worker1, Worker *worker2)
 {
     return worker1->id < worker2->id;
+}
+
+bool cmp2(Worker *worker1, Worker *worker2)
+{
+    return worker1->id > worker2->id;
 }
 
 WorkerManager::WorkerManager()
@@ -159,7 +164,7 @@ int WorkerManager::getEmpNum()
 void WorkerManager::showEmp()
 {
     // 按职工编号对职工进行排序
-    this->sortEmp();
+    // this->sortEmp();
 
     if (this->empArray == nullptr)
     {
@@ -582,12 +587,35 @@ void WorkerManager::sortEmp()
     }
     else
     {
-        std::sort(this->empArray, this->empArray + this->empNum, cmp);
+        // 对职工信息进行排序
+        cout << "请选择排序方式对职工信息进行排序\n";
+        cout << "1.按职工编号从小到大排序\n";
+        cout << "2.按职工编号从大到小排序\n";
+        cout << "请输入你的选择：";
+        int choice = 1;
+        cin >> choice;
+        switch (choice)
+        {
+        case 1:
+            // 按职工编号从小到大排序
+            std::sort(this->empArray, this->empArray + this->empNum, cmp1);
+            break;
+        case 2:
+            // 按职工编号从大到小排序
+            std::sort(this->empArray, this->empArray + this->empNum, cmp2);
+            break;
+        default:
+            cout << "没有此种排序方式！默认按职工编号从小到大排序\n";
+            std::sort(this->empArray, this->empArray + this->empNum, cmp1);
+            break;
+        }
+        this->saveFile();
     }
 }
 
 void WorkerManager::exitSystem(void)
 {
+    this->saveFile();
     cout << "欢迎下次使用" << endl;
 }
 
