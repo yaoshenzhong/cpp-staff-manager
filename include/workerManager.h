@@ -52,5 +52,7 @@ public:
 
     void addEmp(); // 具体添加职工的函数
 
+    void cleanFile(); // 清空文件
+
     ~WorkerManager(); // 析构函数
 };

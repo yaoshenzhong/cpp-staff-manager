@@ -68,6 +68,7 @@ int main()
             wm.sortEmp();
             break;
         case 7: // 清空所有文档
+            wm.cleanFile();
             break;
         default:
             // system("cls") Windows

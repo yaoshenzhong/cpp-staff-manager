@@ -583,6 +583,7 @@ void WorkerManager::sortEmp()
 {
     if (this->empArray == nullptr)
     {
+        cout << "当前系统暂无职工信息，请先添加职工信息" << endl;
         return; // 职工管理系统无职工信息，视为有序
     }
     else
@@ -735,6 +736,39 @@ void WorkerManager::addEmp()
     }
 }
 
+void WorkerManager::cleanFile()
+{
+    system("clear");
+    cout << "确认清空职工信息？\n";
+    cout << "0.取消\n";
+    cout << "1.确认清空\n";
+    cout << "请输入你的选择：";
+    int choice;
+    cin >> choice;
+    if (choice != 0)
+    {
+        std::ofstream ofs;
+        ofs.open(FILENAME, std::ios::trunc);
+
+        if (this->empArray != nullptr)
+        {
+            for (int i = 0; i < this->empNum; i++)
+            {
+                if (this->empArray[i] != nullptr)
+                {
+                    delete this->empArray[i];
+                    this->empArray[i] = nullptr;
+                }
+            }
+            delete[] this->empArray;
+            this->empArray = nullptr;
+            this->empNum = 0;
+            this->fileIsEmpty = true;
+        }
+        cout << "当前系统的职工信息已被清空" << endl;
+    }
+}
+
 WorkerManager::~WorkerManager()
 {
     if (this->empArray != nullptr)
@@ -749,6 +783,6 @@ WorkerManager::~WorkerManager()
         }
         delete[] this->empArray;
         this->empArray = nullptr;
+        this->empNum = 0;
     }
-    this->empNum = 0;
 }
