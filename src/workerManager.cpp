@@ -79,14 +79,14 @@ void WorkerManager::readFlie()
 
     if (ifs.is_open() && ifs.peek() != EOF)
     {
-        cout << "文件打开成功 且 文件中有数据" << endl;
+        // cout << "文件打开成功 且 文件中有数据" << endl;
         this->fileIsEmpty = false; // 初始化文件不为空标志
         // 后续从文件种读取，初始化职工数据
         this->initEmp();
     }
     else
     {
-        cout << "文件不存在 或 文件存在但无数据" << endl;
+        // cout << "文件不存在 或 文件存在但无数据" << endl;
         // 初始化属性
         this->fileIsEmpty = true; // 初始化文件为空标志
         this->empNum = 0;         // 初始化人数
@@ -446,6 +446,117 @@ void WorkerManager::modEmp()
                 this->saveFile();
             }
         }
+    }
+}
+
+void WorkerManager::findEmployeeMenu()
+{
+    while (true)
+    {
+        this->findEmp(); // 调用查找职工信息函数
+        cout << "是否继续查找职工信息？\n";
+        cout << "0.返回主菜单\n";
+        cout << "1.继续查找职工信息\n";
+        cout << "请输入你的选择：";
+        int choice = 0;
+        cin >> choice;
+
+        if (choice != 1)
+        {
+            system("clear");
+            break;
+        }
+    }
+}
+
+void WorkerManager::findEmp()
+{
+    system("clear");
+    if (this->empArray == nullptr)
+    {
+        cout << "当前系统暂无职工信息，请先添加职工信息" << endl;
+    }
+    else
+    {
+        // 查找职工信息
+        // cout << "查找职工信息" << endl;
+        cout << "请选择查找方式？\n";
+        cout << "1.按职工编号查找\n";
+        cout << "2.按职工姓名查找\n";
+        cout << "请输入你的选择：";
+        int choice = 1;
+        cin >> choice;
+        switch (choice)
+        {
+        case 1:
+            // 通过职工编号查找职工信息
+            this->findEmpById();
+            break;
+        case 2:
+            // 通过职工姓名查找职工信息
+            this->findEmpByName();
+            break;
+        default:
+            cout << "输入选项有误！\n";
+            break;
+        }
+    }
+}
+
+void WorkerManager::findEmpById()
+{
+    // 通过职工编号查找职工信息
+    // cout << "通过职工编号查找职工信息\n";
+    cout << "请输入查找的职工编号：";
+    int choice;
+    while (true)
+    {
+        cin >> choice;
+        if (choice > 0)
+        {
+            break;
+        }
+        else
+        {
+            cout << "输入的职工编号不符合要求，请重新输入：";
+        }
+    }
+    int index = this->isExist(choice);
+    if (index == -1)
+    {
+        cout << "查找失败！此编号职工不存在\n";
+    }
+    else
+    {
+        cout << "------查找成功！该职工信息如下：------\n";
+        this->empArray[index]->showInfo();
+    }
+}
+
+void WorkerManager::findEmpByName()
+{
+    // 通过职工姓名查找职工信息
+    // cout << "通过职工姓名查找职工信息\n";
+    cout << "请输入查找的职工姓名：";
+    std::string name;
+    cin >> name;
+    // false表示查找不到该职工，true表示查到该职工
+    bool flag = false;
+    for (int i = 0; i < this->empNum; i++)
+    {
+        if (this->empArray[i]->name == name)
+        {
+            if (!flag)
+            {
+                cout << "------ 姓名为 " << name << " 的职工信息如下：-------\n";
+                flag = true;
+            }
+            this->empArray[i]->showInfo();
+        }
+    }
+    if (!flag)
+    {
+        cout << "查找失败！此姓名职工不存在\n";
     }
 }
 

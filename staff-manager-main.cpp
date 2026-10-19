@@ -5,7 +5,7 @@
 #include "manager.h"
 #include "boss.h"
 
-using std::cin; 
+using std::cin;
 using std::cout;
 using std::endl;
 
@@ -62,6 +62,7 @@ int main()
             wm.modEmployeeMenu();
             break;
         case 5: // 查找职工信息
+            wm.findEmployeeMenu();
             break;
         case 6: // 按照编号排序
             break;

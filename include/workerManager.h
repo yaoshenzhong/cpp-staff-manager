@@ -34,6 +34,13 @@ public:
 
     void modEmp(); // 具体修改职工信息函数
 
+    void findEmployeeMenu(); // 查找职工菜单
+
+    void findEmp(); // 具体查找职工信息函数
+
+    void findEmpById();   // 通过职工编号查找职工信息
+    void findEmpByName(); // 通过职工姓名查找职工信息
+
     // 判断职工是否存在，如果存在，返回职工所在数组中的位置，否则返回-1
     int isExist(int id);
 
